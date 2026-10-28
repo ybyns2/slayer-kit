@@ -6,18 +6,18 @@
   "twitchClientId": "",
   "channels": {
     "stable": {
-      "version": "0.2.2",
+      "version": "1.0.0",
       "critical": false,
-      "notes": "Nouvelle version : code nettoye, installateur corrige, telecommande, clips et alertes fiables.",
-      "installer": "https://github.com/ybyns2/slayer-kit/releases/download/v0.2.2/SlayerKit-Setup-0.2.2.exe",
-      "sha256": "364b7482ed080cba95355d93c74859cd6c2ea47f55c698dc79c3c9a17ac44330"
+      "notes": "Premiere version publique : contributions ouvertes (idees, serveurs, code) depuis Aide et a propos.",
+      "installer": "https://github.com/ybyns2/slayer-kit/releases/download/v1.0.0/SlayerKit-Setup-1.0.0.exe",
+      "sha256": "d08c96b1517b7f132c8bbff27e7f65a079be50991b0a3805dd7d5b9555d95209"
     },
     "beta": {
-      "version": "0.2.2",
+      "version": "1.0.0",
       "critical": false,
-      "notes": "Nouvelle version : code nettoye, installateur corrige, telecommande, clips et alertes fiables.",
-      "installer": "https://github.com/ybyns2/slayer-kit/releases/download/v0.2.2/SlayerKit-Setup-0.2.2.exe",
-      "sha256": "364b7482ed080cba95355d93c74859cd6c2ea47f55c698dc79c3c9a17ac44330"
+      "notes": "Premiere version publique : contributions ouvertes (idees, serveurs, code) depuis Aide et a propos.",
+      "installer": "https://github.com/ybyns2/slayer-kit/releases/download/v1.0.0/SlayerKit-Setup-1.0.0.exe",
+      "sha256": "d08c96b1517b7f132c8bbff27e7f65a079be50991b0a3805dd7d5b9555d95209"
     }
   },
   "vbCableUrl": "https://download.vb-audio.com/Download_CABLE/VBCABLE_Driver_Pack45.zip"
