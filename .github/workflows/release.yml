@@ -1,0 +1,100 @@
+name: Publier une mise à jour
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Numéro de version (ex : 0.2.0)"
+        required: true
+      channel:
+        description: "Canal"
+        type: choice
+        options: [stable, beta]
+        default: stable
+      critical:
+        description: "Mise à jour critique (installée sans demander, après le live)"
+        type: boolean
+        default: false
+      notes:
+        description: "Notes affichées dans l'appli"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Vérifier le numéro de version
+        shell: pwsh
+        run: |
+          if ('${{ inputs.version }}' -notmatch '^\d+\.\d+\.\d+$') { throw "Version invalide : utilise X.Y.Z" }
+          if (git tag -l "v${{ inputs.version }}") { throw "La version ${{ inputs.version }} existe déjà" }
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Compiler l'application
+        shell: pwsh
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          cmake -S . -B build -G Ninja "-DCMAKE_BUILD_TYPE=Release" "-DSK_APP_VERSION=$env:VERSION"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          cmake --build build
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+
+      - name: Construire l'installateur
+        shell: pwsh
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          choco install innosetup -y --no-progress
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" "/DAppVersion=$env:VERSION" installer\SlayerKit.iss
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          Rename-Item dist\SlayerKit-Setup.exe "SlayerKit-Setup-$env:VERSION.exe"
+
+      - name: Empreinte SHA-256
+        id: hash
+        shell: pwsh
+        run: |
+          $h = (Get-FileHash "dist\SlayerKit-Setup-${{ inputs.version }}.exe" -Algorithm SHA256).Hash.ToLower()
+          "$h  SlayerKit-Setup-${{ inputs.version }}.exe" | Out-File dist\SHA256SUMS.txt -Encoding ascii
+          "sha=$h" >> $env:GITHUB_OUTPUT
+
+      - name: Créer la release GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NOTES: ${{ inputs.notes }}
+          VERSION: ${{ inputs.version }}
+          CHANNEL: ${{ inputs.channel }}
+          SHA: ${{ steps.hash.outputs.sha }}
+        shell: pwsh
+        run: |
+          $notes = "$env:NOTES`n`nSHA-256 : ``$env:SHA```nCompilé automatiquement par GitHub Actions depuis ce code public."
+          $ghArgs = @("v$env:VERSION", "dist\SlayerKit-Setup-$env:VERSION.exe", "dist\SHA256SUMS.txt",
+                    "--title", "Slayer Kit $env:VERSION", "--notes", $notes)
+          if ($env:CHANNEL -eq 'beta') { $ghArgs += '--prerelease' }
+          gh release create @ghArgs
+
+      - name: Publier update.json
+        env:
+          NOTES: ${{ inputs.notes }}
+          VERSION: ${{ inputs.version }}
+          CHANNEL: ${{ inputs.channel }}
+          CRITICAL: ${{ inputs.critical }}
+          SHA: ${{ steps.hash.outputs.sha }}
+        shell: pwsh
+        run: |
+          python tools/set_update.py --version "$env:VERSION" --channel "$env:CHANNEL" `
+            --critical "$env:CRITICAL" --sha256 "$env:SHA" --notes "$env:NOTES"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add update.json
+          git commit -m "chore(release): ${{ inputs.version }} (${{ inputs.channel }})"
+          git push
