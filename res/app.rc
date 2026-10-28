@@ -1,0 +1,40 @@
+#include <winres.h>
+
+#define IDI_APP 1
+
+#ifdef SK_DEV
+1 RT_MANIFEST "app-dev.manifest"
+#else
+1 RT_MANIFEST "app.manifest"
+#endif
+IDI_APP ICON "app.ico"
+10 PNG "logo.png"
+20 RCDATA "../kit/obs/decompte-live.lua"
+21 RCDATA "../kit/obs/fin-de-live.lua"
+22 RCDATA "../kit/obs/slayerkit-events.lua"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION SK_VERSION_COMMA
+ PRODUCTVERSION SK_VERSION_COMMA
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040C04B0"
+        BEGIN
+            VALUE "CompanyName", "yns_bnl"
+            VALUE "FileDescription", "Slayer Kit by yns_bnl"
+            VALUE "FileVersion", SK_VERSION
+            VALUE "InternalName", "SlayerKit"
+            VALUE "LegalCopyright", "Copyright (c) 2026 yns_bnl - Licence MIT"
+            VALUE "OriginalFilename", "SlayerKit.exe"
+            VALUE "ProductName", "Slayer Kit"
+            VALUE "ProductVersion", SK_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x040C, 1200
+    END
+END
