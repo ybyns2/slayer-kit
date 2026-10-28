@@ -1,0 +1,46 @@
+name: Signaler un problème
+description: Quelque chose ne marche pas comme prévu.
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler le problème. Le bouton « Signaler un problème » de l'application remplit déjà la version, le logiciel et le serveur.
+  - type: input
+    id: version
+    attributes:
+      label: Version de Slayer Kit
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: logiciel
+    attributes:
+      label: Logiciel de stream
+      placeholder: obs, tiktok-studio ou streamlabs
+    validations:
+      required: true
+  - type: input
+    id: serveur
+    attributes:
+      label: Serveur RP sélectionné
+      placeholder: unity-legacy
+  - type: textarea
+    id: probleme
+    attributes:
+      label: Ce qui se passe
+      description: Décris ce que tu as fait, étape par étape, et ce qui s'est passé.
+    validations:
+      required: true
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Ce que tu attendais
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Journal
+      description: Glisse ici le fichier `slayerkit.log` (dossier ouvert par l'application). Il ne contient aucune clé de stream.

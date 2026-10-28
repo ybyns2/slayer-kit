@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Proposer un serveur RP
+    url: https://github.com/ybyns2/slayer-kit-packs/issues/new?template=serveur.yml
+    about: Les packs serveur (logos, couleurs, visuels) se proposent sur slayer-kit-packs.
+  - name: Questions et entraide
+    url: https://github.com/ybyns2/slayer-kit/discussions
+    about: Pour une question d'utilisation, passe par les discussions.

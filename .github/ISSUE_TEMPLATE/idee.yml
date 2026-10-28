@@ -1,0 +1,26 @@
+name: Proposer une idée
+description: Une nouvelle fonctionnalité ou une amélioration.
+title: "[Idée] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: besoin
+    attributes:
+      label: Le besoin
+      description: Quel problème ça résout pendant tes lives ?
+    validations:
+      required: true
+  - type: textarea
+    id: proposition
+    attributes:
+      label: Ta proposition
+      description: Comment tu imagines la fonctionnalité dans l'application.
+    validations:
+      required: true
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Tu veux t'en occuper ?
+      options:
+        - Non, je propose juste l'idée
+        - Oui, je peux ouvrir une pull request
